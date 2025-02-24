@@ -1,13 +1,12 @@
 package com.shoppingcart.productsservice.controller;
 
-import com.shoppingcart.productsservice.dto.ProductResponse;
+import com.shoppingcart.productsservice.dto.ProductResponseDTO;
+import com.shoppingcart.productsservice.dto.ProductRequestDTO;
 import com.shoppingcart.productsservice.service.ProductsService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("shoppingcart/products")
@@ -15,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductsController {
     private final ProductsService productsService;
     @GetMapping
-    public ResponseEntity<ProductResponse> getAllProducts() {
+    public ResponseEntity<ProductResponseDTO> getAllProducts() {
         return ResponseEntity.ok(productsService.getAllProductsResponse());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ProductResponse> getProductById(@PathVariable Long id) {
-        return ResponseEntity.ok(productsService.getProductByIdResponse(id));
+    @GetMapping("/by-id")
+    public ResponseEntity<ProductResponseDTO> getProductById(@Valid @RequestBody ProductRequestDTO productRequestDTO) {
+        return ResponseEntity.ok(productsService.getProductByIdResponse(productRequestDTO));
     }
 }

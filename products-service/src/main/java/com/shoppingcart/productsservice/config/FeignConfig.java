@@ -1,12 +1,13 @@
 package com.shoppingcart.productsservice.config;
 
-import com.shoppingcart.productsservice.exceptions.FeignErrorDecoder;
-import feign.codec.ErrorDecoder;
+import feign.RequestInterceptor;
 import org.springframework.context.annotation.Bean;
 
 public class FeignConfig {
     @Bean
-    public ErrorDecoder errorDecoder() {
-        return new FeignErrorDecoder();
+    public RequestInterceptor requestInterceptor() {
+        return requestTemplate -> {
+            requestTemplate.header("Content-Type", "application/json");
+        };
     }
 }

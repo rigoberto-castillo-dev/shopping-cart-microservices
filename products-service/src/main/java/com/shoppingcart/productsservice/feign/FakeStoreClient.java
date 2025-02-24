@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
-@FeignClient(name = "fakeStoreClient", url = "https://fakestoreapi.com", configuration = FeignConfig.class)
+@FeignClient(name = "fakeStoreClient", url = "${fake.store.client.url}", configuration = FeignConfig.class)
 public interface FakeStoreClient {
     @GetMapping("/products")
     List<Product> getAllProducts();
 
-    @GetMapping("/products/{id}") // Endpoint para obtener un producto por ID
-    Product getProductById(@PathVariable Long id);
+    @GetMapping("/products/{id}")
+    Product getProductById(@PathVariable String id);
 }
