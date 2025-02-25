@@ -14,5 +14,5 @@ public interface FakeStoreClient {
     List<Product> getAllProducts();
 
     @GetMapping("/products/{id}")
-    Product getProductById(@PathVariable String id);
+    Product getProductById(@PathVariable Long id);
 }

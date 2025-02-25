@@ -1,4 +1,4 @@
-package com.shoppingcart.productsservice.dto;
+package com.shoppingcart.productsservice.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,9 +1,10 @@
 package com.shoppingcart.productsservice.service;
 
 import com.shoppingcart.productsservice.constants.Constants;
-import com.shoppingcart.productsservice.dto.GeneralResponseDTO;
-import com.shoppingcart.productsservice.dto.ProductResponseDTO;
-import com.shoppingcart.productsservice.dto.ProductRequestDTO;
+import com.shoppingcart.productsservice.dto.ProductDTO;
+import com.shoppingcart.productsservice.dto.response.GeneralResponseDTO;
+import com.shoppingcart.productsservice.dto.response.ProductResponseDTO;
+import com.shoppingcart.productsservice.dto.request.ProductRequestDTO;
 import com.shoppingcart.productsservice.feign.FakeStoreClient;
 import com.shoppingcart.productsservice.model.Product;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import static com.shoppingcart.productsservice.constants.Constants.*;
 
 @Service
@@ -21,26 +24,44 @@ public class ProductsService {
     private final FakeStoreClient fakeStoreClient;
 
     public ProductResponseDTO getAllProductsResponse() {
-        GeneralResponseDTO generalResponseDTO;
+        GeneralResponseDTO generalResponseDto;
         List<Product> products = fakeStoreClient.getAllProducts();
         if (products == null || products.isEmpty()) {
-            generalResponseDTO = new GeneralResponseDTO(ERROR_CODE, NOT_RESULTS_MESSSAGE);
-            return new ProductResponseDTO(generalResponseDTO, new ArrayList<>());
+            generalResponseDto = new GeneralResponseDTO(ERROR_CODE, NOT_RESULTS_MESSSAGE);
+            return new ProductResponseDTO(generalResponseDto, new ArrayList<>());
         }
-        generalResponseDTO = new GeneralResponseDTO(SUCCESS_CODE, SUCCESS_MESSAGE);
+
+        List<ProductDTO> productDto = products.stream().map(product -> new ProductDTO(
+                product.getId(),
+                product.getTitle(),
+                product.getPrice(),
+                product.getDescription(),
+                product.getCategory(),
+                product.getImage()
+        )).collect(Collectors.toList());
+
+        generalResponseDto = new GeneralResponseDTO(SUCCESS_CODE, SUCCESS_MESSAGE);
         logger.info(Constants.SUCCESS_MESSAGE);
-        return new ProductResponseDTO(generalResponseDTO, products);
+        return new ProductResponseDTO(generalResponseDto, productDto);
     }
 
     public ProductResponseDTO getProductByIdResponse(ProductRequestDTO productRequestDTO) {
-        GeneralResponseDTO generalResponseDTO;
-        Product product = fakeStoreClient.getProductById(productRequestDTO.getId());
+        GeneralResponseDTO generalResponseDto;
+        Product product = fakeStoreClient.getProductById(productRequestDTO.getProductId());
         if (product == null) {
-            generalResponseDTO = new GeneralResponseDTO(ERROR_CODE, NOT_RESULTS_MESSSAGE);
-            return new ProductResponseDTO(generalResponseDTO, new ArrayList<>());
+            generalResponseDto = new GeneralResponseDTO(ERROR_CODE, NOT_RESULTS_MESSSAGE);
+            return new ProductResponseDTO(generalResponseDto, new ArrayList<>());
         }
-        generalResponseDTO = new GeneralResponseDTO(SUCCESS_CODE, SUCCESS_MESSAGE);
+        ProductDTO productDto = new ProductDTO(
+                product.getId(),
+                product.getTitle(),
+                product.getPrice(),
+                product.getDescription(),
+                product.getCategory(),
+                product.getImage()
+        );
+        generalResponseDto = new GeneralResponseDTO(SUCCESS_CODE, SUCCESS_MESSAGE);
         logger.info(Constants.SUCCESS_MESSAGE);
-        return new ProductResponseDTO(generalResponseDTO, List.of(product));
+        return new ProductResponseDTO(generalResponseDto, List.of(productDto));
     }
 }

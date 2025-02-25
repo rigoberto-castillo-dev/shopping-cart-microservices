@@ -1,7 +1,7 @@
 package com.shoppingcart.productsservice.exceptions;
 
-import com.shoppingcart.productsservice.dto.GeneralResponseDTO;
-import com.shoppingcart.productsservice.dto.ProductResponseDTO;
+import com.shoppingcart.productsservice.dto.response.GeneralResponseDTO;
+import com.shoppingcart.productsservice.dto.response.ProductResponseDTO;
 import com.shoppingcart.productsservice.constants.Constants;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;

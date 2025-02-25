@@ -1,7 +1,7 @@
 package com.shoppingcart.productsservice.controller;
 
-import com.shoppingcart.productsservice.dto.ProductResponseDTO;
-import com.shoppingcart.productsservice.dto.ProductRequestDTO;
+import com.shoppingcart.productsservice.dto.response.ProductResponseDTO;
+import com.shoppingcart.productsservice.dto.request.ProductRequestDTO;
 import com.shoppingcart.productsservice.service.ProductsService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ public class ProductsController {
         return ResponseEntity.ok(productsService.getAllProductsResponse());
     }
 
-    @GetMapping("/by-id")
+    @PostMapping("/by-id")
     public ResponseEntity<ProductResponseDTO> getProductById(@Valid @RequestBody ProductRequestDTO productRequestDTO) {
         return ResponseEntity.ok(productsService.getProductByIdResponse(productRequestDTO));
     }
