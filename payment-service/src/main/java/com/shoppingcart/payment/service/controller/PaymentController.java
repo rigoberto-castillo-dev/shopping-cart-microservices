@@ -1,7 +1,7 @@
 package com.shoppingcart.payment.service.controller;
 
-import com.shoppingcart.payment.service.dto.PaymentRequestDTO;
-import com.shoppingcart.payment.service.dto.PaymentResponseDTO;
+import com.shoppingcart.payment.service.dto.request.PaymentRequestDTO;
+import com.shoppingcart.payment.service.dto.response.PaymentResponseDTO;
 import com.shoppingcart.payment.service.service.PaymentService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

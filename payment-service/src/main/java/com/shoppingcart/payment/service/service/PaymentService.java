@@ -1,8 +1,10 @@
 package com.shoppingcart.payment.service.service;
 
 import com.shoppingcart.payment.service.constants.Constants;
-import com.shoppingcart.payment.service.dto.PaymentRequestDTO;
-import com.shoppingcart.payment.service.dto.PaymentResponseDTO;
+import com.shoppingcart.payment.service.dto.PaymentDTO;
+import com.shoppingcart.payment.service.dto.request.PaymentRequestDTO;
+import com.shoppingcart.payment.service.dto.response.GeneralResponseDTO;
+import com.shoppingcart.payment.service.dto.response.PaymentResponseDTO;
 import com.shoppingcart.payment.service.entity.Payment;
 import com.shoppingcart.payment.service.repository.PaymentRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +19,6 @@ import java.util.Random;
 @Slf4j
 public class PaymentService {
     private final PaymentRepository repository;
-    private final Random random = new Random();
 
     public PaymentService(PaymentRepository repository) {
         this.repository = repository;
@@ -25,26 +26,30 @@ public class PaymentService {
 
     public ResponseEntity<PaymentResponseDTO> processPayment(PaymentRequestDTO request) {
 
-        if (request.getAmount() < 1) {
-            log.warn(Constants.LOG_INVALID_PAYMENT_AMOUNT, request.getAmount(), request.getOrderId());
-            throw new IllegalArgumentException(Constants.ERROR_INVALID_AMOUNT);
-        }
-        boolean paymentSuccess = random.nextBoolean();
+        boolean paymentSuccess = true;
+
+        PaymentDTO paymentDto = new PaymentDTO();
+        paymentDto.setOrderId(request.getOrderId());
+        paymentDto.setAmount(request.getAmount());
+        paymentDto.setSuccess(paymentSuccess);
+        paymentDto.setTimestamp(LocalDateTime.now());
 
         Payment payment = new Payment();
-        payment.setOrderId(request.getOrderId());
-        payment.setAmount(request.getAmount());
-        payment.setSuccess(paymentSuccess);
-        payment.setTimestamp(LocalDateTime.now());
+        payment.setOrderId(paymentDto.getOrderId());
+        payment.setAmount(paymentDto.getAmount());
+        payment.setSuccess(paymentDto.isSuccess());
+        payment.setTimestamp(paymentDto.getTimestamp());
+
         repository.save(payment);
 
+        GeneralResponseDTO generalResponseDto;
         if (paymentSuccess) {
             log.info(Constants.LOG_PAYMENT_SUCCESS, request.getOrderId());
-            return ResponseEntity.ok(new PaymentResponseDTO(Constants.STATUS_SUCCESS, Constants.RESPONSE_PAYMENT_SUCCESS, payment));
+           generalResponseDto = (new GeneralResponseDTO(Constants.STATUS_SUCCESS, Constants.RESPONSE_PAYMENT_SUCCESS));
         } else {
             log.error(Constants.LOG_PAYMENT_FAILED, request.getOrderId());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new PaymentResponseDTO(Constants.STATUS_BAD_REQUEST, Constants.RESPONSE_PAYMENT_FAILED, null));
+            generalResponseDto = (new GeneralResponseDTO(Constants.RESPONSE_PAYMENT_FAILED, Constants.STATUS_INTERNAL_SERVER_ERROR));
         }
+        return ResponseEntity.ok(new PaymentResponseDTO(generalResponseDto, payment));
     }
 }

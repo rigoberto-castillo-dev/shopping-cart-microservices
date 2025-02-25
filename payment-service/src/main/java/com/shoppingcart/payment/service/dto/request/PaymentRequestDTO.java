@@ -1,4 +1,4 @@
-package com.shoppingcart.payment.service.dto;
+package com.shoppingcart.payment.service.dto.request;
 
 
 import jakarta.validation.constraints.Min;
