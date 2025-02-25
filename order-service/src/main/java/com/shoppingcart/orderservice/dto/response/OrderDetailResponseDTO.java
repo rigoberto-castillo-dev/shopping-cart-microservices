@@ -1,6 +1,6 @@
-package com.shoppingcart.orderdetailservice.dto.reponse;
+package com.shoppingcart.orderservice.dto.response;
 
-import com.shoppingcart.orderdetailservice.dto.OrderDetailDTO;
+import com.shoppingcart.orderservice.dto.OrderDetailDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class OrderDetailResponseDTO{
+@AllArgsConstructor
+public class OrderDetailResponseDTO {
     private GeneralResponseDTO generalResponseDto;
     private List<OrderDetailDTO> orderDetailDto;
 }

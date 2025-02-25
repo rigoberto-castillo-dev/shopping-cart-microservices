@@ -1,5 +1,6 @@
-package com.shoppingcart.orderservice.dto;
+package com.shoppingcart.orderservice.dto.request;
 
+import com.shoppingcart.orderservice.dto.OrderDetailDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,5 +13,5 @@ import java.util.List;
 public class OrderRequestDTO {
     private Long userId;
     private double totalAmount;
-    private List<OrderDetailDTO> orderDetails;
+    private List<OrderDetailRequestDTO> orderDetailsRequestDto;
 }

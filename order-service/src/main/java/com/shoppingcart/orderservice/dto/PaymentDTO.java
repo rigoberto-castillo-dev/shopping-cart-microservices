@@ -5,18 +5,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class OrderDTO {
-    private Long id;
-    private Long userId;
-    private double totalAmount;
-    private boolean paid;
+@NoArgsConstructor
+public class PaymentDTO {
     private String cliente;
     private String paymentMethod;
+    private double amount;
+    private boolean success;
     private String timestamp;
-    private List<OrderDetailDTO> orderDetails;
 }

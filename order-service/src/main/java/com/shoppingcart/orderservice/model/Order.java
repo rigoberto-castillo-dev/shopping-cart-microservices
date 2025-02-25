@@ -1,11 +1,12 @@
 package com.shoppingcart.orderservice.model;
 
-import com.shoppingcart.orderservice.enums.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+
 
 @Entity
 @Table(name = "t_orders")
@@ -22,4 +23,6 @@ public class Order {
     private double totalAmount;
     private boolean paid;
     private LocalDateTime createdAt;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderDetail> orderDetails = new ArrayList<>();
 }
