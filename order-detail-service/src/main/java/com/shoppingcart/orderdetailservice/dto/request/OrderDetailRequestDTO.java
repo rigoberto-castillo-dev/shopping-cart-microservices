@@ -1,4 +1,4 @@
-package com.shoppingcart.orderdetailservice.dto;
+package com.shoppingcart.orderdetailservice.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

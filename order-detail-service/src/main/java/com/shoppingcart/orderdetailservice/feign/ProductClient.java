@@ -1,14 +1,14 @@
 package com.shoppingcart.orderdetailservice.feign;
 
 import com.shoppingcart.orderdetailservice.config.FeignConfig;
-import com.shoppingcart.orderdetailservice.dto.ProductDTO;
-import com.shoppingcart.orderdetailservice.dto.ProductResponseDTO;
+import com.shoppingcart.orderdetailservice.dto.reponse.ProductResponseDTO;
+import com.shoppingcart.orderdetailservice.dto.request.ProductRequestDTO;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "product-service", url = "http://localhost:8081/shoppingcart", configuration = FeignConfig.class)
+@FeignClient(name = "product-service", url = "${product.service.client.url}", configuration = FeignConfig.class)
 public interface ProductClient {
-    @GetMapping("/products/{id}")
-    ProductResponseDTO getProductById(@PathVariable Long id);
+    @PostMapping("/products/by-id")
+    ProductResponseDTO getProductById(@RequestBody ProductRequestDTO productRequestDTO);
 }

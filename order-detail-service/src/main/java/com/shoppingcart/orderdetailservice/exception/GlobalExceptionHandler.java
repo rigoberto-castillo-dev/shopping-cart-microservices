@@ -1,39 +1,50 @@
 package com.shoppingcart.orderdetailservice.exception;
 
+import com.shoppingcart.orderdetailservice.dto.reponse.GeneralResponseDTO;
+import com.shoppingcart.orderdetailservice.dto.reponse.OrderDetailResponseDTO;
+import com.shoppingcart.orderdetailservice.constants.Constants;
 import feign.FeignException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.HashMap;
-import java.util.Map;
 
-@RestControllerAdvice
+@Slf4j
+@ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().forEach(error ->
-                errors.put(error.getField(), error.getDefaultMessage()));
-
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    public ResponseEntity<OrderDetailResponseDTO> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+        log.error("[{}] - {}: {}", ex.getClass().getSimpleName(), Constants.BAD_REQUEST_MESSAGE, ex.getMessage());
+        GeneralResponseDTO generalResponse = new GeneralResponseDTO(
+                Constants.ERROR_CODE,
+                Constants.BAD_REQUEST_MESSAGE
+        );
+        OrderDetailResponseDTO response= new  OrderDetailResponseDTO(generalResponse, null);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(FeignException.class)
-    public ResponseEntity<String> handleFeignException(FeignException ex) {
-        return new ResponseEntity<>("Error connecting to FakeStore API", HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<OrderDetailResponseDTO> handleFeignException(FeignException ex) {
+        log.error("[{}] - {}: {}", ex.getClass().getSimpleName(), Constants.ERROR_CONNECTING_TO_PRODUCT_SERVICE, ex.getMessage());
+        GeneralResponseDTO generalResponse = new GeneralResponseDTO(
+                Constants.ERROR_CODE,
+                Constants.ERROR_CONNECTING_TO_PRODUCT_SERVICE
+        );
+        OrderDetailResponseDTO response = new OrderDetailResponseDTO(generalResponse, null);
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleGenericException(Exception ex) {
-        return new ResponseEntity<>("An unexpected error occurred: " + ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    public ResponseEntity<OrderDetailResponseDTO> handleGeneralException(Exception ex) {
+        log.error("[{}] - {}: {}", ex.getClass().getSimpleName(), Constants.INTERNAL_ERROR_MESSAGE, ex.getMessage());
+        GeneralResponseDTO generalResponse = new GeneralResponseDTO(
+               Constants.ERROR_CODE,
+                Constants.ERROR_ORDER_DETAILS
+        );
+        OrderDetailResponseDTO response = new OrderDetailResponseDTO(generalResponse, null);
+        return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

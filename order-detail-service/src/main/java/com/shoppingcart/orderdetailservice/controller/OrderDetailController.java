@@ -1,8 +1,9 @@
 package com.shoppingcart.orderdetailservice.controller;
 
 import com.shoppingcart.orderdetailservice.dto.OrderDetailDTO;
-import com.shoppingcart.orderdetailservice.dto.OrderDetailRequestDTO;
-import com.shoppingcart.orderdetailservice.dto.OrderDetailResponseDTO;
+import com.shoppingcart.orderdetailservice.dto.request.OrderDetailIdRequestDTO;
+import com.shoppingcart.orderdetailservice.dto.request.OrderDetailRequestDTO;
+import com.shoppingcart.orderdetailservice.dto.reponse.OrderDetailResponseDTO;
 import com.shoppingcart.orderdetailservice.service.OrderDetailService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -20,12 +21,12 @@ public class OrderDetailController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderDetailResponseDTO<List<OrderDetailDTO>>> saveOrderDetails(@RequestBody List<OrderDetailRequestDTO> request) {
+    public ResponseEntity<OrderDetailResponseDTO> saveOrderDetails(@RequestBody List<OrderDetailRequestDTO> request) {
         return service.saveOrderDetails(request);
     }
 
-    @GetMapping("/{orderId}")
-    public ResponseEntity<OrderDetailResponseDTO<List<OrderDetailDTO>>> getOrderDetails(@PathVariable Long orderId) {
-        return service.getOrderDetails(orderId);
+    @PostMapping("by-id")
+    public ResponseEntity<OrderDetailResponseDTO> getOrderDetailsById(@Valid @RequestBody OrderDetailIdRequestDTO orderDetailIdRequestDTO) {
+        return service.getOrderDetailsByOrderId(orderDetailIdRequestDTO);
     }
 }
