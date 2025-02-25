@@ -30,6 +30,8 @@ public class PaymentService {
 
         PaymentDTO paymentDto = new PaymentDTO();
         paymentDto.setOrderId(request.getOrderId());
+        paymentDto.setCliente("Rigoberto Castillo");
+        paymentDto.setPaymentMethod("PAYPAL");
         paymentDto.setAmount(request.getAmount());
         paymentDto.setSuccess(paymentSuccess);
         paymentDto.setTimestamp(LocalDateTime.now());
@@ -50,6 +52,6 @@ public class PaymentService {
             log.error(Constants.LOG_PAYMENT_FAILED, request.getOrderId());
             generalResponseDto = (new GeneralResponseDTO(Constants.RESPONSE_PAYMENT_FAILED, Constants.STATUS_INTERNAL_SERVER_ERROR));
         }
-        return ResponseEntity.ok(new PaymentResponseDTO(generalResponseDto, payment));
+        return ResponseEntity.ok(new PaymentResponseDTO(generalResponseDto, paymentDto));
     }
 }

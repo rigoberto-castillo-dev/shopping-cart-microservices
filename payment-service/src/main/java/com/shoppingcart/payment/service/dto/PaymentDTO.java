@@ -10,8 +10,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PaymentDTO {
-    private Long id;
     private Long orderId;
+    private String cliente;
+    private String paymentMethod;
     private double amount;
     private boolean success;
     private LocalDateTime timestamp;
